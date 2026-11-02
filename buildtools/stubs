@@ -1,0 +1,461 @@
+Compile-time placeholders for the Android classes the app uses. They are never put in the APK;
+the phone provides the real classes. When you use a new Android class or method, add it here with
+the exact same name, parameter types and return type as in the Android docs
+(https://developer.android.com/reference), or the app will crash when it reaches that call.
+Constants (like Gravity.CENTER) must have the same value as the real one, since the compiler copies it.
+
+Format: each "// == <path>" line starts a new Java file. build.sh cuts this file apart at those lines
+into build/stubs-src/<path> and compiles the pieces. Everything above the first marker is ignored.
+
+// == android/app/Activity.java
+package android.app;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.Window;
+
+public class Activity extends Context {
+    public static final int RESULT_OK = -1;
+
+    protected void onCreate(Bundle savedInstanceState) {}
+    protected void onResume() {}
+    protected void onDestroy() {}
+    protected void onSaveInstanceState(Bundle outState) {}
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {}
+    public void setContentView(View view) {}
+    public Window getWindow() { return null; }
+    public final boolean requestWindowFeature(int featureId) { return false; }
+    public void startActivityForResult(Intent intent, int requestCode) {}
+    public boolean dispatchTouchEvent(MotionEvent event) { return false; }
+}
+
+// == android/app/AlertDialog.java
+package android.app;
+
+import android.content.Context;
+import android.content.DialogInterface;
+import android.view.View;
+
+public class AlertDialog extends Dialog {
+    public static class Builder {
+        public Builder(Context context) {}
+        public Builder setTitle(CharSequence title) { return this; }
+        public Builder setMessage(CharSequence message) { return this; }
+        public Builder setView(View view) { return this; }
+        public Builder setPositiveButton(CharSequence text, DialogInterface.OnClickListener listener) { return this; }
+        public Builder setNegativeButton(CharSequence text, DialogInterface.OnClickListener listener) { return this; }
+        public Builder setNeutralButton(CharSequence text, DialogInterface.OnClickListener listener) { return this; }
+        public Builder setOnDismissListener(DialogInterface.OnDismissListener listener) { return this; }
+        public AlertDialog show() { return null; }
+    }
+}
+
+// == android/app/Dialog.java
+package android.app;
+
+public class Dialog {
+    public void dismiss() {}
+}
+
+// == android/content/ContentResolver.java
+package android.content;
+
+import android.net.Uri;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+public abstract class ContentResolver {
+    public final InputStream openInputStream(Uri uri) throws FileNotFoundException { return null; }
+    public final OutputStream openOutputStream(Uri uri, String mode) throws FileNotFoundException { return null; }
+}
+
+// == android/content/Context.java
+package android.content;
+
+import android.content.res.Resources;
+import java.io.File;
+
+public abstract class Context {
+    public ContentResolver getContentResolver() { return null; }
+    public File getFilesDir() { return null; }
+    public Resources getResources() { return null; }
+}
+
+// == android/content/DialogInterface.java
+package android.content;
+
+public interface DialogInterface {
+    interface OnClickListener {
+        void onClick(DialogInterface dialog, int which);
+    }
+
+    interface OnDismissListener {
+        void onDismiss(DialogInterface dialog);
+    }
+}
+
+// == android/content/Intent.java
+package android.content;
+
+import android.net.Uri;
+
+public class Intent {
+    public static final String ACTION_CREATE_DOCUMENT = "android.intent.action.CREATE_DOCUMENT";
+    public static final String ACTION_OPEN_DOCUMENT = "android.intent.action.OPEN_DOCUMENT";
+    public static final String CATEGORY_OPENABLE = "android.intent.category.OPENABLE";
+    public static final String EXTRA_TITLE = "android.intent.extra.TITLE";
+
+    public Intent(String action) {}
+    public Intent addCategory(String category) { return this; }
+    public Intent setType(String type) { return this; }
+    public Intent putExtra(String name, String value) { return this; }
+    public Uri getData() { return null; }
+}
+
+// == android/content/res/Configuration.java
+package android.content.res;
+
+public final class Configuration {
+    public static final int UI_MODE_NIGHT_MASK = 0x30;
+    public static final int UI_MODE_NIGHT_YES = 0x20;
+
+    public int uiMode;
+}
+
+// == android/content/res/Resources.java
+package android.content.res;
+
+import android.util.DisplayMetrics;
+
+public class Resources {
+    public DisplayMetrics getDisplayMetrics() { return null; }
+    public Configuration getConfiguration() { return null; }
+}
+
+// == android/graphics/Insets.java
+package android.graphics;
+
+public final class Insets {
+    public final int left, top, right, bottom;
+
+    private Insets() { left = top = right = bottom = 0; }
+}
+
+// == android/graphics/Typeface.java
+package android.graphics;
+
+public class Typeface {
+    public static final Typeface DEFAULT_BOLD = null;
+}
+
+// == android/net/Uri.java
+package android.net;
+
+public abstract class Uri {}
+
+// == android/os/Bundle.java
+package android.os;
+
+public final class Bundle {
+    public void putString(String key, String value) {}
+    public String getString(String key) { return null; }
+}
+
+// == android/R.java
+package android;
+
+public final class R {
+    public static final class attr {
+        public static final int borderlessButtonStyle = 0x0101032b;
+    }
+}
+
+// == android/text/Editable.java
+package android.text;
+
+public interface Editable extends CharSequence {}
+
+// == android/text/format/DateFormat.java
+package android.text.format;
+
+import android.content.Context;
+import java.util.Locale;
+
+public class DateFormat {
+    public static boolean is24HourFormat(Context context) { return true; }
+    public static String getBestDateTimePattern(Locale locale, String skeleton) { return null; }
+}
+
+// == android/text/InputType.java
+package android.text;
+
+public interface InputType {
+    int TYPE_CLASS_TEXT = 0x00000001;
+    int TYPE_TEXT_FLAG_CAP_SENTENCES = 0x00004000;
+    int TYPE_TEXT_FLAG_MULTI_LINE = 0x00020000;
+}
+
+// == android/util/AttributeSet.java
+package android.util;
+
+public interface AttributeSet {}
+
+// == android/util/DisplayMetrics.java
+package android.util;
+
+public class DisplayMetrics {
+    public float density;
+}
+
+// == android/view/Gravity.java
+package android.view;
+
+public class Gravity {
+    public static final int CENTER_HORIZONTAL = 1;
+    public static final int CENTER_VERTICAL = 16;
+    public static final int CENTER = 17;
+    public static final int TOP = 48;
+}
+
+// == android/view/MotionEvent.java
+package android.view;
+
+public final class MotionEvent {
+    public static final int ACTION_DOWN = 0;
+    public static final int ACTION_UP = 1;
+    public static final int ACTION_MOVE = 2;
+    public static final int ACTION_CANCEL = 3;
+
+    public static MotionEvent obtain(MotionEvent other) { return null; }
+    public final int getActionMasked() { return 0; }
+    public final void setAction(int action) {}
+    public final float getRawX() { return 0; }
+    public final float getRawY() { return 0; }
+    public final void recycle() {}
+}
+
+// == android/view/ViewConfiguration.java
+package android.view;
+
+import android.content.Context;
+
+public class ViewConfiguration {
+    public static ViewConfiguration get(Context context) { return null; }
+    public int getScaledTouchSlop() { return 0; }
+}
+
+// == android/view/ViewGroup.java
+package android.view;
+
+import android.content.Context;
+
+public abstract class ViewGroup extends View {
+    public static class LayoutParams {
+        public static final int MATCH_PARENT = -1;
+        public static final int WRAP_CONTENT = -2;
+
+        public LayoutParams(int width, int height) {}
+    }
+
+    public static class MarginLayoutParams extends LayoutParams {
+        public MarginLayoutParams(int width, int height) { super(width, height); }
+    }
+
+    public ViewGroup(Context context) { super(context); }
+    public void addView(View child) {}
+    public void addView(View child, LayoutParams params) {}
+    public void removeAllViews() {}
+    public int getChildCount() { return 0; }
+    public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {}
+}
+
+// == android/view/View.java
+package android.view;
+
+import android.content.Context;
+
+public class View {
+    public static final int VISIBLE = 0;
+    public static final int GONE = 8;
+    public static final int FOCUS_DOWN = 130;
+
+    public interface OnClickListener {
+        void onClick(View v);
+    }
+
+    public interface OnApplyWindowInsetsListener {
+        WindowInsets onApplyWindowInsets(View v, WindowInsets insets);
+    }
+
+    public interface OnTouchListener {
+        boolean onTouch(View v, MotionEvent event);
+    }
+
+    public View(Context context) {}
+    public void setOnClickListener(OnClickListener listener) {}
+    public void setOnApplyWindowInsetsListener(OnApplyWindowInsetsListener listener) {}
+    public void setPadding(int left, int top, int right, int bottom) {}
+    public void setContentDescription(CharSequence description) {}
+    public void setId(int id) {}
+    public void setVisibility(int visibility) {}
+    public void setMinimumWidth(int minWidth) {}
+    public ViewGroup.LayoutParams getLayoutParams() { return null; }
+    public void setLayoutParams(ViewGroup.LayoutParams params) {}
+    public boolean post(Runnable action) { return false; }
+    public void postOnAnimation(Runnable action) {}
+    public void setOnTouchListener(OnTouchListener listener) {}
+    public void setBackgroundColor(int color) {}
+    public void setTranslationY(float translationY) {}
+    public void setTranslationZ(float translationZ) {}
+    public ViewPropertyAnimator animate() { return null; }
+    public final int getTop() { return 0; }
+    public final int getWidth() { return 0; }
+    public final int getHeight() { return 0; }
+    public final int getScrollY() { return 0; }
+    public void scrollBy(int x, int y) {}
+    public void getLocationOnScreen(int[] outLocation) {}
+}
+
+// == android/view/ViewPropertyAnimator.java
+package android.view;
+
+public class ViewPropertyAnimator {
+    public ViewPropertyAnimator translationY(float value) { return this; }
+    public ViewPropertyAnimator setDuration(long duration) { return this; }
+    public void cancel() {}
+}
+
+// == android/view/WindowInsets.java
+package android.view;
+
+import android.graphics.Insets;
+
+public final class WindowInsets {
+    public static final WindowInsets CONSUMED = null;
+
+    public static final class Type {
+        public static int systemBars() { return 0; }
+        public static int displayCutout() { return 0; }
+        public static int ime() { return 0; }
+    }
+
+    public Insets getInsets(int typeMask) { return null; }
+}
+
+// == android/view/Window.java
+package android.view;
+
+public abstract class Window {
+    public static final int FEATURE_NO_TITLE = 1;
+
+    public void setSoftInputMode(int mode) {}
+}
+
+// == android/view/WindowManager.java
+package android.view;
+
+public interface WindowManager {
+    class LayoutParams extends ViewGroup.LayoutParams {
+        public static final int SOFT_INPUT_ADJUST_RESIZE = 0x10;
+
+        public LayoutParams() { super(MATCH_PARENT, MATCH_PARENT); }
+    }
+}
+
+// == android/widget/Button.java
+package android.widget;
+
+import android.content.Context;
+import android.util.AttributeSet;
+
+public class Button extends TextView {
+    public Button(Context context) { super(context); }
+    public Button(Context context, AttributeSet attrs, int defStyleAttr) { super(context); }
+}
+
+// == android/widget/EditText.java
+package android.widget;
+
+import android.content.Context;
+import android.text.Editable;
+
+public class EditText extends TextView {
+    public EditText(Context context) { super(context); }
+    public Editable getText() { return null; }
+}
+
+// == android/widget/FrameLayout.java
+package android.widget;
+
+import android.content.Context;
+import android.view.ViewGroup;
+
+public class FrameLayout extends ViewGroup {
+    public FrameLayout(Context context) { super(context); }
+}
+
+// == android/widget/LinearLayout.java
+package android.widget;
+
+import android.content.Context;
+import android.view.ViewGroup;
+
+public class LinearLayout extends ViewGroup {
+    public static final int HORIZONTAL = 0;
+    public static final int VERTICAL = 1;
+
+    public static class LayoutParams extends ViewGroup.MarginLayoutParams {
+        public LayoutParams(int width, int height) { super(width, height); }
+        public LayoutParams(int width, int height, float weight) { super(width, height); }
+    }
+
+    public LinearLayout(Context context) { super(context); }
+    public void setOrientation(int orientation) {}
+    public void setGravity(int gravity) {}
+}
+
+// == android/widget/ScrollView.java
+package android.widget;
+
+import android.content.Context;
+
+public class ScrollView extends FrameLayout {
+    public ScrollView(Context context) { super(context); }
+    public boolean fullScroll(int direction) { return false; }
+}
+
+// == android/widget/TextView.java
+package android.widget;
+
+import android.content.Context;
+import android.graphics.Typeface;
+import android.view.View;
+
+public class TextView extends View {
+    public TextView(Context context) { super(context); }
+    public final void setText(CharSequence text) {}
+    public void setTextSize(float size) {}
+    public void setTextColor(int color) {}
+    public void setTypeface(Typeface typeface) {}
+    public void setGravity(int gravity) {}
+    public void setInputType(int type) {}
+    public void setLines(int lines) {}
+    public void setMaxLines(int maxLines) {}
+    public void setMinWidth(int minPixels) {}
+}
+
+// == android/widget/Toast.java
+package android.widget;
+
+import android.content.Context;
+
+public class Toast {
+    public static final int LENGTH_LONG = 1;
+
+    public static Toast makeText(Context context, CharSequence text, int duration) { return null; }
+    public void show() {}
+}

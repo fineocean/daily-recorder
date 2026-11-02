@@ -1,0 +1,8 @@
+sdk/
+build/
+*.apk
+*.sha256
+*.zip
+*.p12
+*.jks
+*.keystore
