@@ -4,6 +4,7 @@
 
 Write short entries for each day. Browse past days on a month calendar, swipe to move between days and months, and drag entries to reorder them. You can export the whole diary to a file and import it again.
 
+- No Android SDK, Gradle, r8
 - No runtime dependencies
 - No permissions
 - No account
@@ -24,19 +25,25 @@ An APK you build yourself is signed with your own key, so it has a different fin
 
 ## Building
 
-**Build with just a JDK and r8. It does not need Android SDK or Gradle.**
+**Build with just a JDK. It does not need the Android SDK, Gradle, or any download.**
 
 ```sh
-./build.sh   # downloads r8.jar on first run, then compiles, dexes and signs dailyrecorder-<version>.apk
+java Build.java   # compiles, dexes and signs dailyrecorder-<version>.apk
 ```
 
-`build.sh` creates a signing key at `~/.android-keys/release.p12`, or wherever `$KEYSTORE` points. You have to back it up, since an installed app cannot update without it.
+The first build creates a signing key at `~/.android-keys/release.p12`, or wherever `$KEYSTORE` points. You have to back it up, since an installed app cannot update without it.
 
 ## How it works without the SDK
 
-The Android classes the app uses are declared in `buildtools/stubs`, which holds compile-time placeholders with the same signatures as the real ones. They are never packaged into the app, because the phone supplies the real classes. `buildtools/Build.java` is a small manifest and resource-table encoder (for the icon, `src/icon.png`) and an APK packer/signer written in plain Java.
+The Android classes the app uses are declared in `stubs`, which holds compile-time placeholders with the same signatures as the real ones. They are never packaged into the app, because the phone supplies the real classes. `Build.java`, in plain Java, does the rest of what the SDK's tools would:
 
-See the notes at the top of `buildtools/stubs` before using a new Android API.
+- converts the compiled classes into Android's `classes.dex`, including turning lambdas into small classes
+- encodes the manifest and the resource table (for the icon, `src/icon.png`)
+- packs and signs the APK
+
+The dex converter only handles the Java features this app uses. If you use one it doesn't know, the build stops with an "unsupported: ..." message rather than producing a broken app.
+
+See the notes at the top of `stubs` before using a new Android API.
 
 ## License
 

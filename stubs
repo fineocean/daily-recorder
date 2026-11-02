@@ -4,8 +4,8 @@ the exact same name, parameter types and return type as in the Android docs
 (https://developer.android.com/reference), or the app will crash when it reaches that call.
 Constants (like Gravity.CENTER) must have the same value as the real one, since the compiler copies it.
 
-Format: each "// == <path>" line starts a new Java file. build.sh cuts this file apart at those lines
-into build/stubs-src/<path> and compiles the pieces. Everything above the first marker is ignored.
+Format: each "// == <path>" line starts a new Java file. Build.java cuts this file apart at those lines
+and compiles each piece as if it were a file at <path>. Everything above the first marker is ignored.
 
 // == android/app/Activity.java
 package android.app;

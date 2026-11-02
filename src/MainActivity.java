@@ -362,9 +362,8 @@ public class MainActivity extends Activity {
                 try (OutputStream out = getContentResolver().openOutputStream(uri, "wt")) {
                     counts = diary.exportTo(out);
                 }
-                toast(counts[1] == 0
-                        ? "Exported all " + counts[0] + " entries"
-                        : "Exported " + counts[0] + " entries (" + counts[1] + " damaged lines skipped)");
+                toast("Exported " + count(counts[0], "entry", "entries")
+                        + (counts[1] == 0 ? "" : " (" + count(counts[1], "damaged line", "damaged lines") + " skipped)"));
             });
         } else if (request == REQUEST_IMPORT) {
             attempt("import", () -> {
@@ -372,7 +371,7 @@ public class MainActivity extends Activity {
                 try (InputStream in = getContentResolver().openInputStream(uri)) {
                     counts = diary.importFrom(in);
                 }
-                toast("Imported " + counts[0] + " entries" + (counts[1] > 0 ? ", " + counts[1] + " already here" : ""));
+                toast("Imported " + count(counts[0], "entry", "entries") + (counts[1] > 0 ? ", " + counts[1] + " already here" : ""));
             });
         }
     }
@@ -547,6 +546,11 @@ public class MainActivity extends Activity {
 
     private int dp(int value) {
         return (int) (value * getResources().getDisplayMetrics().density + 0.5f);
+    }
+
+    /** "1 entry", "2 entries" */
+    private static String count(int n, String one, String many) {
+        return n + " " + (n == 1 ? one : many);
     }
 
     private void toast(String message) {
